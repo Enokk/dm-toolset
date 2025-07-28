@@ -1,8 +1,7 @@
 <script setup lang="ts">
-interface Props {
+defineProps<{
   isVisible: boolean
-}
-defineProps<Props>()
+}>()
 
 const emit = defineEmits<{
   close: []
