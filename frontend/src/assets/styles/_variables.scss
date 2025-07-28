@@ -1,0 +1,12 @@
+:root {
+    // Layout dimensions
+    --navbar-height: 60px;
+    --menu-width: 280px;
+
+    // Colors
+    --primary-color: var(--p-primary-color);
+    --primary-contrast-color: var(--p-primary-contrast-color);
+    --text-color: var(--p-text-color);
+    --text-color-secondary: var(--p-text-muted-color);
+    --surface-ground: var(--p-surface-950);
+}

@@ -1,5 +1,5 @@
-import 'primeicons/primeicons.css'
-import '@/assets/main.css'
+import '@/assets/styles/main.scss'
+import '@/assets/font.css'
 import '@/assets/tailwind.css'
 
 import { createApp } from 'vue'
@@ -17,13 +17,14 @@ app.use(router)
 app.use(PrimeVue, {
   theme: {
     preset: MyTheme,
+    options: {
+        darkModeSelector: '.app-dark'
+    }
   },
 })
 
 import Button from 'primevue/button'
-import ToggleSwitch from 'primevue/toggleswitch';
 
 app.component('Button', Button)
-app.component('ToggleSwitch', ToggleSwitch)
 
 app.mount('#app')

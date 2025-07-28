@@ -2,10 +2,13 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center pt-10 gap-10 h-full bg-gray-700">
-    <div class="text-5xl font-bold text-(--p-secondary-color)">
-        Home
+  <div class="flex flex-col items-center pt-10 gap-10 h-full">
+    <div class="text-5xl font-bold">
+      Home
     </div>
-    <Button label="Click" />
+    <div class="text-muted-color">
+      prova
+    </div>
+    <Button type="button" label="Click"/>
   </div>
 </template>
