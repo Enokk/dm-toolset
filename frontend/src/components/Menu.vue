@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 defineProps<{
   isVisible: boolean
 }>()
@@ -23,11 +26,11 @@ const menuItems = [
 ]
 
 const navigateTo = (path: string) => {
-  console.log(`Navigating to: ${path}`)
-  emit('close')
+  router.push(path)
+  closeMenu()
 }
 
-const handleBackgroundClick = () => {
+const closeMenu = () => {
   emit('close')
 }
 </script>
@@ -36,7 +39,7 @@ const handleBackgroundClick = () => {
   <div 
     v-if="isVisible"
     class="fixed top-[var(--navbar-height)] right-0 bottom-0 left-0 z-40 bg-black/20 backdrop-blur-xs"
-    @click="handleBackgroundClick"
+    @click="closeMenu"
   />
 
   <Transition name="slide-fade">
