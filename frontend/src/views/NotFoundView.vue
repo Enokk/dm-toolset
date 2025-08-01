@@ -23,9 +23,6 @@ const goBack = () => {
     />
     
     <div class="text-center">
-      <h1 class="text-4xl font-bold mb-4">
-        Pagina non trovata
-      </h1>
       <p class="text-lg text-muted-color max-w-md">
         Ops! La pagina che stai cercando non esiste o è stata spostata.
       </p>

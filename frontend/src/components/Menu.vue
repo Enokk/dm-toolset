@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { getMenuItemsGrouped } from '@/config/routeConfig'
+
 const router = useRouter()
 
 defineProps<{
@@ -10,20 +13,9 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const menuItems = [
-  { label: 'Home', icon: 'pi pi-home', action: () => navigateTo('/') },
-  { label: 'Gestione Personaggi', icon: 'pi pi-users', action: () => navigateTo('/characters') },
-  { label: 'Campagne', icon: 'pi pi-calendar', action: () => navigateTo('/campaigns') },
-  { separator: true },
-  { label: 'Mappe', icon: 'pi pi-map', action: () => navigateTo('/maps') },
-  { label: 'Inventario', icon: 'pi pi-box', action: () => navigateTo('/inventory') },
-  { separator: true },
-  { label: 'Dadi', icon: 'pi pi-circle', action: () => navigateTo('/dice') },
-  { label: 'Note', icon: 'pi pi-file-edit', action: () => navigateTo('/notes') },
-  { separator: true },
-  { label: 'Impostazioni', icon: 'pi pi-cog', action: () => navigateTo('/settings') },
-  { label: 'Aiuto', icon: 'pi pi-question-circle', action: () => navigateTo('/help') }
-]
+const menuSections = computed(() => {
+  return getMenuItemsGrouped()
+})
 
 const navigateTo = (path: string) => {
   router.push(path)
@@ -36,11 +28,13 @@ const closeMenu = () => {
 </script>
 
 <template>
-  <div 
-    v-if="isVisible"
-    class="fixed top-[var(--navbar-height)] right-0 bottom-0 left-0 z-40 bg-black/20 backdrop-blur-xs"
-    @click="closeMenu"
-  />
+  <Transition name="backdrop-fade">
+    <div 
+      v-if="isVisible"
+      class="fixed top-[var(--navbar-height)] right-0 bottom-0 left-0 z-40 bg-black/20 backdrop-blur-xs"
+      @click="closeMenu"
+    />
+  </Transition>
 
   <Transition name="slide-fade">
     <div 
@@ -48,15 +42,18 @@ const closeMenu = () => {
       class="fixed top-[var(--navbar-height)] right-4 z-50 mt-4 bg-surface-900 rounded-2xl shadow-2xl w-[var(--menu-width)]"
     >
       <div class="py-2">
-        <template v-for="(item, index) in menuItems" :key="index">
+        <template v-for="(sectionItems, sectionNumber) in menuSections" :key="sectionNumber">
+          <!-- Separatore tra sezioni (tranne per la prima) -->
           <div 
-            v-if="item.separator" 
+            v-if="sectionNumber > 1"
             class="my-2 mx-4 border-t border-surface-800"
           />
           
+          <!-- Items della sezione -->
           <button
-            v-else
-            @click="item.action"
+            v-for="item in sectionItems"
+            :key="item.name"
+            @click="navigateTo(item.path)"
             class="w-full px-6 py-3 flex items-center gap-4 text-left hover:bg-surface-800 transition-all duration-200 group"
           >
             <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-surface-800 group-hover:bg-primary-900/30 transition-colors duration-200">
@@ -76,6 +73,7 @@ const closeMenu = () => {
 </template>
 
 <style scoped>
+/* Transizione per il menu */
 .slide-fade-enter-active {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -92,5 +90,19 @@ const closeMenu = () => {
 .slide-fade-leave-to {
   opacity: 0;
   transform: translateY(-10px) scale(0.98);
+}
+
+/* Transizione per il backdrop */
+.backdrop-fade-enter-active {
+  transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.backdrop-fade-leave-active {
+  transition: opacity 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.backdrop-fade-enter-from,
+.backdrop-fade-leave-to {
+  opacity: 0;
 }
 </style> 
