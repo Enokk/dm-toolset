@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
 
-@utility theme-gradient {
-  background-image: linear-gradient(to right, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+@layer utilities {
+  .theme-gradient {
+    background-image: linear-gradient(to right, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+  }
 }

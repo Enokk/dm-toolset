@@ -33,7 +33,7 @@ const closeMenu = () => {
       </div>
       
       <div class="flex-1 flex justify-center">
-          <span class="theme-gradient bg-clip-text text-transparent text-3xl font-bold">
+          <span class="theme-gradient bg-clip-text text-transparent text-3xl font-bold cursor-default">
             {{ currentPageTitle }}
           </span>
       </div>
