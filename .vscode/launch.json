@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend: FastAPI (debug + reload)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
+      "module": "uvicorn",
+      "args": ["dm_toolset_backend.main:app", "--reload", "--port", "8000"],
+      "cwd": "${workspaceFolder}/backend",
+      "justMyCode": true,
+      "subProcess": true
+    },
+    {
+      "name": "Backend: Export OpenAPI Schema",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
+      "program": "${workspaceFolder}/backend/scripts/export_openapi.py",
+      "cwd": "${workspaceFolder}/backend",
+      "justMyCode": true
+    }
+  ]
+}

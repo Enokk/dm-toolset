@@ -1,0 +1,12 @@
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    database_url: str = Field(validation_alias="DATABASE_URL")
+    cors_origins: list[str] = Field(validation_alias="CORS_ORIGINS")
+
+
+settings = Settings()

@@ -1,0 +1,25 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
+  "files.exclude": {
+    ".claude": true,
+    "**/__pycache__": true,
+    "**/.venv": true,
+    "**/dist": true,
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    ".claude": true,
+    "**/__pycache__": true,
+    "**/.venv": true,
+    "**/dist": true,
+    "**/node_modules": true
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "pnpm*, .node-version",
+    "pyproject.toml": "uv.lock, .python-version",
+    ".env": ".env.*, env.d.ts"
+  },
+  "css.lint.unknownAtRules": "ignore"
+}
