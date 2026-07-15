@@ -8,6 +8,7 @@ __pycache__/
 # Node
 node_modules/
 dist/
+typed-router.d.ts
 
 # Env
 .env
