@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from dm_toolset_backend.api import api_router
 from dm_toolset_backend.core.config import settings
 from dm_toolset_backend.core.db import check_connection
 
@@ -26,3 +27,5 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Content-Type"],
 )
+
+app.include_router(api_router, prefix="/api")
