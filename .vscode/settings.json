@@ -4,6 +4,7 @@
     ".claude": true,
     "**/__pycache__": true,
     "**/.venv": true,
+    "**/.vite": true,
     "**/dist": true,
     "**/node_modules": true
   },
@@ -11,6 +12,7 @@
     ".claude": true,
     "**/__pycache__": true,
     "**/.venv": true,
+    "**/.vite": true,
     "**/dist": true,
     "**/node_modules": true
   },
