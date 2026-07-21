@@ -23,8 +23,6 @@ class Character(CharacterBase, table=True):
 # `character_race.name`/`character_class.name` (the RaceName/ClassName enum codes)
 # without a second round-trip to /character_races or /character_classes.
 class CharacterPublic(CharacterBase):
-    model_config = ConfigDict(populate_by_name=True)
-
     id: int
     character_race: CharacterRace
     character_class: CharacterClass
