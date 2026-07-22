@@ -8,6 +8,9 @@ from dm_toolset_backend.models.character_race import CharacterRace
 class CharacterBase(SQLModel):
     name: str
     level: int
+    hit_points_max: int
+    hit_points_current: int
+    hit_points_temp: int = Field(default=0)
 
 
 class Character(CharacterBase, table=True):
@@ -19,10 +22,15 @@ class Character(CharacterBase, table=True):
 
 
 # Read-only response shape: nests the full CharacterRace/CharacterClass rows (id + name)
-# instead of the bare *_id foreign keys, so clients can localize
-# `character_race.name`/`character_class.name` (the RaceName/ClassName enum codes)
+# instead of the bare *_id foreign keys, so clients can read
+# `character_race.name`/`character_class.name` directly
 # without a second round-trip to /character_races or /character_classes.
 class CharacterPublic(CharacterBase):
     id: int
     character_race: CharacterRace
     character_class: CharacterClass
+
+
+class CharacterHitPointsUpdate(SQLModel):
+    hit_points_current: int
+    hit_points_temp: int

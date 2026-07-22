@@ -3,7 +3,7 @@ from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
 from dm_toolset_backend.core.db import DBSessionDep
-from dm_toolset_backend.models import Character, CharacterPublic
+from dm_toolset_backend.models import Character, CharacterPublic, CharacterHitPointsUpdate
 
 router = APIRouter(prefix="/characters", tags=["characters"])
 
@@ -25,4 +25,19 @@ def get_character_by_id(character_id: int, session: DBSessionDep) -> CharacterPu
     character = session.exec(_character_select.where(Character.id == character_id)).first()
     if character is None:
         raise HTTPException(status_code=404, detail="character_not_found")
+    return CharacterPublic.model_validate(character)
+
+
+@router.patch("/{character_id}/vitals", response_model=CharacterPublic)
+def update_character_vitals(
+    character_id: int, payload: CharacterHitPointsUpdate, session: DBSessionDep
+) -> CharacterPublic:
+    character = session.exec(_character_select.where(Character.id == character_id)).first()
+    if character is None:
+        raise HTTPException(status_code=404, detail="character_not_found")
+    character.hit_points_current = max(0, min(payload.hit_points_current, character.hit_points_max))
+    character.hit_points_temp = max(0, payload.hit_points_temp)
+    session.add(character)
+    session.commit()
+    session.refresh(character)
     return CharacterPublic.model_validate(character)

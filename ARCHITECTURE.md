@@ -60,13 +60,6 @@ Web app che parte come sostituto digitale di una scheda personaggio cartacea di 
 - **Routes tipizzate**: il plugin genera `frontend/typed-router.d.ts` (committato in git, come consigliato dal tool stesso — rigenerato automaticamente ad ogni dev/build, ma serve già presente perché `vue-tsc --build` e `vite build` girano in parallelo nello script `build`). Serve anche `vueCompilerOptions` in `tsconfig.app.json` (plugin Volar `vue-router/volar/sfc-typed-router` + `rootDir`) per avere `useRoute()` tipizzato per-pagina nell'editor.
 - **Compromesso accettato:** la struttura delle cartelle *è* la definizione delle rotte — rinominare/spostare un file `.vue` in `pages/` cambia l'URL. Per meta-field per-rotta (titolo, `requiresAuth`, ecc.) si userà la macro `definePage()` nel componente invece di un oggetto route scritto a mano.
 
-### Localizzazione (i18n): italiano/inglese
-
-- Contenuto utente-facing previsto in due lingue: italiano e inglese.
-- La traduzione avviene interamente lato frontend con **vue-i18n**: il backend non restituisce mai testo già tradotto, solo dati e codici (es. errori come codice/enum, non un messaggio in una lingua specifica) — così aggiungere o modificare una lingua non richiede toccare il backend.
-- Non ancora implementato: non esiste ancora nessun modello/vista con testo reale da tradurre. Da introdurre (setup `vue-i18n`, file di traduzione) quando arriva il primo componente frontend reale, scrivendolo già i18n-ready invece di rifattorizzarlo dopo.
-- Lingua di codice/log/commenti tecnici: vedi convenzione separata più sotto ("Struttura repo e tooling") — è una decisione indipendente da questa.
-
 ### Modelli e migrazioni: SQLModel + Alembic
 
 - **SQLModel** unifica modello DB e schema API in un'unica classe, riducendo il boilerplate tra layer di persistenza e layer di validazione/serializzazione.
@@ -83,6 +76,13 @@ Web app che parte come sostituto digitale di una scheda personaggio cartacea di 
 - FastAPI espone automaticamente lo schema OpenAPI (`/openapi.json`); da questo si generano i tipi TypeScript per Vue con **openapi-typescript**, evitando di duplicare a mano le interfacce dei modelli lato frontend.
 - Genera solo i tipi (non un client HTTP completo): il client per le chiamate (fetch/Axios) resta scritto a mano, tipizzato con i tipi generati. Scelta più controllabile rispetto a tool che generano anche il client (es. orval), a costo di un minimo di boilerplate in più sulle chiamate.
 - Da rilanciare come script (es. `npm run gen:api`) ogni volta che lo schema del backend cambia; non è una sincronizzazione automatica/live.
+
+### Chiamate al backend: composables per dominio
+
+- Ogni dominio applicativo (personaggio, in futuro inventario, incantesimi, ecc.) espone un composable dedicato in `src/composables/` (es. `useCharacter.ts`) che incapsula le chiamate a `apiClient` e restituisce stato reattivo (dati, flag come `notFound`) più le azioni disponibili (es. `updateVitals`). I componenti Vue non chiamano mai `apiClient` direttamente.
+- Scelta guidata dalla dimensione attuale del progetto: evita di introdurre uno state manager globale (Pinia) o una libreria di server-state (TanStack Query / Vue Query) prima che il problema che risolvono si presenti davvero — approccio incrementale, non "big design up front".
+- **Trigger per introdurre Pinia** (già presente tra le dipendenze ma non ancora usata): quando uno stato deve essere condiviso tra componenti che non sono in relazione padre/figlio (es. un header globale col personaggio attivo, visibile insieme alle sotto-pagine inventario/incantesimi). Finché i dati restano confinati a una vista e alle sue sotto-viste dirette, route param + composable locale bastano.
+- **Trigger per introdurre TanStack Query (Vue Query)**: quando una mutation in un dominio deve invalidare/aggiornare dati letti da un altro dominio (es. equipaggiare un'arma nell'inventario che deve riflettersi su CA/peso mostrati nella scheda personaggio), o quando serve caching/deduplica reale tra viste diverse.
 
 ### CSS e componenti UI: Tailwind + shadcn-vue/Reka UI
 
@@ -101,7 +101,8 @@ Web app che parte come sostituto digitale di una scheda personaggio cartacea di 
 
 ## Note per contesti futuri
 
-- Scaffold iniziale completato: backend FastAPI (`/backend`, struttura `src/dm_toolset_backend` con `core/config.py`, `core/db.py`, `api/`, `models/`) e frontend Vue (`/frontend`, Vite + TS + Router (file-based, vedi sopra) + Pinia + Tailwind + shadcn-vue), nessun modello/dominio applicativo ancora implementato.
-- Nessuna migrazione Alembic ancora generata: `models/` è vuoto, quindi non c'è ancora nulla da migrare.
+- Scaffold iniziale completato: backend FastAPI (`/backend`, struttura `src/dm_toolset_backend` con `core/config.py`, `core/db.py`, `api/`, `models/`) e frontend Vue (`/frontend`, Vite + TS + Router (file-based, vedi sopra) + Pinia + Tailwind + shadcn-vue).
+- Primo dominio applicativo implementato: modelli `Character`/`CharacterClass`/`CharacterRace` con API di lettura + update vitals (`GET /api/characters/`, `GET /api/characters/{id}`, `PATCH /api/characters/{id}/vitals`, più i corrispondenti endpoint di lettura per classi/razze), e relativa UI (`frontend/src/pages/character.vue` + composable `useCharacter`, vedi sopra). Migrazioni Alembic presenti per tabelle, seed dati di riferimento e aggiunta hit points.
+- **Da allineare:** la pagina attuale è `src/pages/character.vue` (nome singolare, piatta, `character_id` hardcoded a `1`), mentre la convenzione di routing documentata sopra prevede `characters/[id].vue` + sotto-pagine. Il refactor verso quella struttura è rimandato a quando arriveranno selezione personaggio e sezioni inventario/incantesimi, per farlo una volta sola invece che a metà ora.
 - Le decisioni sopra sono definitive per l'avvio del progetto ma non immutabili: se emergono esigenze concrete (es. tanta gestione di dati di reference), rivalutarle.
 - Aggiornare questo documento quando si prendono nuove decisioni architetturali rilevanti (es. autenticazione, hosting/deploy, convenzioni API).
