@@ -4,11 +4,16 @@ import { ref } from 'vue'
 import AbilityScoresCard from '@/components/character/AbilityScoresCard.vue'
 import CharacterHeader from '@/components/character/CharacterHeader.vue'
 import HitPointsCard from '@/components/character/HitPointsCard.vue'
+import SavingThrowsCard from '@/components/character/SavingThrowsCard.vue'
 import { useCharacter } from '@/composables/useCharacter'
+import { proficiencyBonusForLevel } from '@/lib/dnd'
 
 const mode = ref<'exploration' | 'combat'>('exploration')
 
 const { character, notFound, updateVitals } = useCharacter(1)
+
+// Placeholder until class/talent-driven proficiency is modeled on the backend.
+const savingThrowProficiencies = ['strength', 'constitution'] as const
 </script>
 
 <template>
@@ -43,6 +48,20 @@ const { character, notFound, updateVitals } = useCharacter(1)
             :intelligence="character.intelligence"
             :wisdom="character.wisdom"
             :charisma="character.charisma"
+            class="col-span-2"
+          />
+        </div>
+
+        <div class="grid grid-cols-8 mt-4">
+          <SavingThrowsCard
+            :strength="character.strength"
+            :dexterity="character.dexterity"
+            :constitution="character.constitution"
+            :intelligence="character.intelligence"
+            :wisdom="character.wisdom"
+            :charisma="character.charisma"
+            :proficiency-bonus="proficiencyBonusForLevel(character.level)"
+            :proficient-in="[...savingThrowProficiencies]"
             class="col-span-2"
           />
         </div>

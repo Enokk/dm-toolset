@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useDiceRoll } from '@/composables/useDiceRoll'
+import { abilityModifier, formatModifier } from '@/lib/dnd'
 
 const props = defineProps<{
   strength: number
@@ -27,19 +28,10 @@ const abilities = computed(() => [
 
 const abilityColumns = computed(() => [abilities.value.slice(0, 3), abilities.value.slice(3, 6)])
 
-function modifier(score: number) {
-  return Math.floor((score - 10) / 2)
-}
-
-function formatModifier(score: number) {
-  const mod = modifier(score)
-  return mod >= 0 ? `+${mod}` : `${mod}`
-}
-
 const { rollD20 } = useDiceRoll()
 
 function rollCheck(ability: { label: string, score: number }) {
-  rollD20(`Prova di ${ability.label}`, modifier(ability.score))
+  rollD20(`Prova di ${ability.label}`, abilityModifier(ability.score))
 }
 </script>
 
@@ -64,14 +56,14 @@ function rollCheck(ability: { label: string, score: number }) {
               {{ ability.score }}
             </Badge>
           </div>
-          <span class="text-2xl font-bold">{{ formatModifier(ability.score) }}</span>
+          <span class="text-2xl font-bold">{{ formatModifier(abilityModifier(ability.score)) }}</span>
           <Button
             variant="ghost"
             size="icon"
             :aria-label="`Tira per ${ability.label}`"
             @click="rollCheck(ability)"
           >
-            <Dices class="size-5 text-muted-foreground" />
+            <Dices class="size-5 text-primary" />
           </Button>
         </div>
       </div>
