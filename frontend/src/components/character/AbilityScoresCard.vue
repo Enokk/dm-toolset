@@ -15,6 +15,7 @@ const props = defineProps<{
   intelligence: number
   wisdom: number
   charisma: number
+  mode: 'exploration' | 'combat'
 }>()
 
 const abilities = computed(() => [
@@ -49,7 +50,7 @@ function rollCheck(ability: { label: string, score: number }) {
           class="flex items-center justify-center gap-4 p-0"
         >
           <div class="flex flex-col items-center gap-1 p-2 pb-3 pr-0">
-            <div class="font-medium uppercase tracking-[0.15em] text-muted-foreground">
+            <div class="label-caps text-muted-foreground">
               {{ ability.abbr }}
             </div>
             <Badge variant="outline">
@@ -63,7 +64,7 @@ function rollCheck(ability: { label: string, score: number }) {
             :aria-label="`Tira per ${ability.label}`"
             @click="rollCheck(ability)"
           >
-            <Dices class="size-5 text-primary" />
+            <Dices :class="['size-5', props.mode === 'combat' ? 'text-destructive' : 'text-primary']" />
           </Button>
         </div>
       </div>

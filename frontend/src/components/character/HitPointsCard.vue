@@ -57,7 +57,7 @@ function addTemp() {
         <Heart class="ml-2 size-6 text-muted-foreground" />
         <span class="ml-1 text-3xl font-bold">{{ current }}</span>
         <span class="text-sm text-muted-foreground">/ {{ max }}</span>
-        <Badge v-if="temp > 0" variant="secondary" class="ml-auto text-success">
+        <Badge v-if="temp > 0" variant="outline" class="ml-auto text-success">
           +{{ temp }} temp
         </Badge>
       </div>

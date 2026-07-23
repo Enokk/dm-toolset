@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Astroid, Dices, Dot, Minus } from '@lucide/vue'
+import { Dices, Minus } from '@lucide/vue'
 import { computed } from 'vue'
 
 import { Button } from '@/components/ui/button'
@@ -18,6 +18,7 @@ const props = defineProps<{
   charisma: number
   proficiencyBonus: number
   proficientIn: AbilityKey[]
+  mode: 'exploration' | 'combat'
 }>()
 
 const savingThrows = computed(() => {
@@ -47,7 +48,7 @@ function rollSave(save: { label: string, modifier: number }) {
 <template>
   <Card class="p-0">
     <CardHeader class="border-b px-4 py-3">
-      <CardTitle class="flex items-center gap-4 text-sm font-bold uppercase tracking-[0.15em]">
+      <CardTitle class="flex items-center gap-4 text-sm label-caps font-bold">
         <Minus></Minus>
         Tiri Salvezza
       </CardTitle>
@@ -58,24 +59,26 @@ function rollSave(save: { label: string, modifier: number }) {
         :key="save.key"
         class="flex items-center gap-3"
       >
+        <span
+          :class="[
+            'size-2.5 shrink-0 rounded-full border',
+            props.mode === 'combat' ? 'border-destructive' : 'border-primary',
+            save.proficient ? (props.mode === 'combat' ? 'bg-destructive' : 'bg-primary') : 'bg-transparent',
+          ]"
+        />
+        <span class="text-xs label-caps text-muted-foreground">
+          {{ save.label }}
+        </span>
+        <span class="ml-auto mr-6 text-base font-semibold">{{ formatModifier(save.modifier) }}</span>
         <Button
           variant="ghost"
           size="icon"
           :aria-label="`Tira Tiro Salvezza su ${save.label}`"
+          class="mr-3"
           @click="rollSave(save)"
         >
-          <Dices class="size-5 text-primary" />
+          <Dices :class="['size-5', props.mode === 'combat' ? 'text-destructive' : 'text-primary']" />
         </Button>
-        <span
-          :class="[
-            'size-2.5 shrink-0 rounded-full border',
-            save.proficient ? 'border-primary bg-primary' : 'border-primary bg-transparent',
-          ]"
-        />
-        <span class="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-          {{ save.label }}
-        </span>
-        <span class="ml-auto pr-6 text-sm font-semibold">{{ formatModifier(save.modifier) }}</span>
       </div>
     </CardContent>
   </Card>

@@ -11,6 +11,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@utility label-caps {
+    @apply font-medium uppercase tracking-[0.2em];
+}
+
 @theme inline {
     --font-sans: 'Space Grotesk', sans-serif;
     --font-heading: var(--font-sans);
@@ -141,4 +145,8 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
     }
+}
+
+[data-sonner-toaster] {
+  font-family: var(--font-sans);
 }
