@@ -11,6 +11,12 @@ class CharacterBase(SQLModel):
     hit_points_max: int
     hit_points_current: int
     hit_points_temp: int = Field(default=0)
+    strength: int
+    dexterity: int
+    constitution: int
+    intelligence: int
+    wisdom: int
+    charisma: int
 
 
 class Character(CharacterBase, table=True):

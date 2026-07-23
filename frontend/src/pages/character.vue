@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import AbilityScoresCard from '@/components/character/AbilityScoresCard.vue'
 import CharacterHeader from '@/components/character/CharacterHeader.vue'
 import HitPointsCard from '@/components/character/HitPointsCard.vue'
 import { useCharacter } from '@/composables/useCharacter'
@@ -31,6 +32,18 @@ const { character, notFound, updateVitals } = useCharacter(1)
             :temp="character.hit_points_temp"
             class="col-span-2"
             @change="updateVitals"
+          />
+        </div>
+
+        <div class="grid grid-cols-8 mt-4">
+          <AbilityScoresCard
+            :strength="character.strength"
+            :dexterity="character.dexterity"
+            :constitution="character.constitution"
+            :intelligence="character.intelligence"
+            :wisdom="character.wisdom"
+            :charisma="character.charisma"
+            class="col-span-2"
           />
         </div>
       </main>
