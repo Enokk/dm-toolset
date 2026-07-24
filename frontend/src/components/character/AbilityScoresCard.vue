@@ -61,7 +61,6 @@ function rollCheck(ability: { label: string, score: number }) {
           <Button
             variant="ghost"
             size="icon"
-            :aria-label="`Tira per ${ability.label}`"
             @click="rollCheck(ability)"
           >
             <Dices :class="['size-5', props.mode === 'combat' ? 'text-destructive' : 'text-primary']" />

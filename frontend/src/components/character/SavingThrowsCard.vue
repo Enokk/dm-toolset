@@ -77,7 +77,6 @@ function rollSave(save: { label: string, modifier: number }) {
         <Button
           variant="ghost"
           size="icon"
-          :aria-label="`Tira Tiro Salvezza su ${save.label}`"
           class="mr-3"
           @click="rollSave(save)"
         >

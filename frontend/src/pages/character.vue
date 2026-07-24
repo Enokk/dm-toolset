@@ -4,10 +4,12 @@ import { ref } from 'vue'
 import AbilityScoresCard from '@/components/character/AbilityScoresCard.vue'
 import CharacterHeader from '@/components/character/CharacterHeader.vue'
 import HitPointsCard from '@/components/character/HitPointsCard.vue'
+import InitiativeCard from '@/components/character/InitiativeCard.vue'
 import SavingThrowsCard from '@/components/character/SavingThrowsCard.vue'
 import SkillsCard from '@/components/character/SkillsCard.vue'
+import StatCard from '@/components/character/StatCard.vue'
 import { useCharacter } from '@/composables/useCharacter'
-import { proficiencyBonusForLevel } from '@/lib/dnd'
+import { formatModifier, passivePerception, proficiencyBonusForLevel } from '@/lib/dnd'
 
 const mode = ref<'exploration' | 'combat'>('exploration')
 
@@ -32,18 +34,44 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
       </div>
 
       <main class="px-10 py-8">
-        <div class="grid grid-cols-6">
+        <div class="grid grid-cols-10 gap-4">
           <HitPointsCard
             :current="character.hit_points_current"
             :max="character.hit_points_max"
             :temp="character.hit_points_temp"
-            class="col-span-2"
+            class="col-span-5"
             @change="updateVitals"
+          />
+          <StatCard
+            label="Classe Armatura"
+            :value="'##'"
+            class="col-span-1"
+          />
+          <InitiativeCard
+            :dexterity="character.dexterity"
+            :mode="mode"
+            class="col-span-1"
+          />
+          <StatCard
+            label="Velocità"
+            :value="character.character_race.speed"
+            subtitle="metri"
+            class="col-span-1"
+          />
+          <StatCard
+            label="Bonus di Competenza"
+            :value="formatModifier(proficiencyBonusForLevel(character.level))"
+            class="col-span-1"
+          />
+          <StatCard
+            label="Percezione Passiva"
+            :value="passivePerception(character.wisdom, proficiencyBonusForLevel(character.level), skillProficiencies.includes('perception'))"
+            class="col-span-1"
           />
         </div>
 
-        <div class="grid grid-cols-8 gap-4 mt-4">
-          <div class="col-span-2 flex flex-col gap-4">
+        <div class="grid grid-cols-12 gap-4 mt-4">
+          <div class="col-span-3 flex flex-col gap-4">
             <AbilityScoresCard
               :strength="character.strength"
               :dexterity="character.dexterity"
@@ -65,7 +93,7 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
               :mode="mode"
             />
           </div>
-          <div class="col-span-3">
+          <div class="col-span-4">
             <SkillsCard
               :strength="character.strength"
               :dexterity="character.dexterity"

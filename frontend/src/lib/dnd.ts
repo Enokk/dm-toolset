@@ -20,3 +20,7 @@ export function formatModifier(modifier: number) {
 export function proficiencyBonusForLevel(level: number) {
   return Math.floor((level - 1) / 4) + 2
 }
+
+export function passivePerception(wisdom: number, proficiencyBonus: number, isProficient: boolean) {
+  return 10 + abilityModifier(wisdom) + (isProficient ? proficiencyBonus : 0)
+}

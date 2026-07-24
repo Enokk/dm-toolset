@@ -123,7 +123,6 @@ function rollSkill(skill: { label: string, modifier: number }) {
         <Button
           variant="ghost"
           size="icon"
-          :aria-label="`Tira Prova di ${skill.label}`"
           class="mr-3"
           @click="rollSkill(skill)"
         >
