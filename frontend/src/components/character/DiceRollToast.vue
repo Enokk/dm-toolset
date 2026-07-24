@@ -25,7 +25,7 @@ const formula = computed(() => {
     class="flex w-60 flex-col items-center gap-1 rounded-lg border bg-popover p-4"
     :class="isCritical ? 'border-success' : isFumble ? 'border-destructive' : 'border-border'"
   >
-    <span class="text-xs label-caps text-muted-foreground">
+    <span class="text-xs label-caps text-center text-muted-foreground">
       {{ title }}
     </span>
     <span
