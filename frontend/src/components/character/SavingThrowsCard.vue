@@ -5,9 +5,7 @@ import { computed } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useDiceRoll } from '@/composables/useDiceRoll'
-import { abilityModifier, formatModifier } from '@/lib/dnd'
-
-export type AbilityKey = 'strength' | 'dexterity' | 'constitution' | 'intelligence' | 'wisdom' | 'charisma'
+import { abilityModifier, type AbilityKey, formatModifier } from '@/lib/dnd'
 
 const props = defineProps<{
   strength: number
@@ -48,7 +46,10 @@ function rollSave(save: { label: string, modifier: number }) {
 <template>
   <Card class="p-0">
     <CardHeader class="border-b px-4 py-3">
-      <CardTitle class="flex items-center gap-4 text-sm label-caps font-bold">
+      <CardTitle :class="[
+          'flex items-center gap-4 text-sm label-caps font-bold',
+          props.mode === 'combat' ? 'text-destructive' : 'text-primary'
+        ]">
         <Minus></Minus>
         Tiri Salvezza
       </CardTitle>
@@ -66,7 +67,10 @@ function rollSave(save: { label: string, modifier: number }) {
             save.proficient ? (props.mode === 'combat' ? 'bg-destructive' : 'bg-primary') : 'bg-transparent',
           ]"
         />
-        <span class="text-xs label-caps text-muted-foreground">
+        <span :class="[
+            'text-xs label-caps',
+            save.proficient ? 'font-semibold text-foreground' : 'text-muted-foreground',
+          ]">
           {{ save.label }}
         </span>
         <span class="ml-auto mr-6 text-base font-semibold">{{ formatModifier(save.modifier) }}</span>
