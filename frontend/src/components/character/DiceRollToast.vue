@@ -3,20 +3,23 @@ import { computed } from 'vue'
 
 import { Badge } from '@/components/ui/badge'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   title: string
   roll: number
   modifier: number
   total: number
-}>()
+  sides?: number
+}>(), {
+  sides: 20,
+})
 
-const isCritical = computed(() => props.roll === 20)
-const isFumble = computed(() => props.roll === 1)
+const isCritical = computed(() => props.sides === 20 && props.roll === 20)
+const isFumble = computed(() => props.sides === 20 && props.roll === 1)
 
 const formula = computed(() => {
-  if (props.modifier === 0) return `d20 (${props.roll})`
+  if (props.modifier === 0) return `d${props.sides} (${props.roll})`
   const sign = props.modifier > 0 ? '+' : '-'
-  return `d20 (${props.roll}) ${sign} ${Math.abs(props.modifier)}`
+  return `d${props.sides} (${props.roll}) ${sign} ${Math.abs(props.modifier)}`
 })
 </script>
 

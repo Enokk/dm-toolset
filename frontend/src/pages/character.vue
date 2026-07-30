@@ -6,6 +6,7 @@ import CharacterHeader from '@/components/character/CharacterHeader.vue'
 import HitPointsCard from '@/components/character/HitPointsCard.vue'
 import InitiativeCard from '@/components/character/InitiativeCard.vue'
 import InventoryCard from '@/components/character/InventoryCard.vue'
+import QuickRollsCard from '@/components/character/QuickRollsCard.vue'
 import SavingThrowsCard from '@/components/character/SavingThrowsCard.vue'
 import SkillsCard from '@/components/character/SkillsCard.vue'
 import StatCard from '@/components/character/StatCard.vue'
@@ -40,7 +41,7 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
             :current="character.hit_points_current"
             :max="character.hit_points_max"
             :temp="character.hit_points_temp"
-            class="col-span-5"
+            class="col-span-4"
             @change="updateVitals"
           />
           <StatCard
@@ -69,6 +70,7 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
             :value="passivePerception(character.wisdom, proficiencyBonusForLevel(character.level), skillProficiencies.includes('perception'))"
             class="col-span-1"
           />
+          <QuickRollsCard class="col-span-1" />
         </div>
 
         <div class="grid grid-cols-12 gap-4 mt-4">
