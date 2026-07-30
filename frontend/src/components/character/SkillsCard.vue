@@ -93,11 +93,11 @@ function rollSkill(skill: { label: string, modifier: number }) {
           'flex items-center gap-4 text-sm label-caps font-bold',
           props.mode === 'combat' ? 'text-destructive' : 'text-primary'
         ]">
-        <Minus></Minus>
+        <Minus />
         Abilità
       </CardTitle>
     </CardHeader>
-    <CardContent class="space-y-3 p-4 pt-0">
+    <CardContent class="space-y-2 p-4 pt-0">
       <div
         v-for="skill in skills"
         :key="skill.key"

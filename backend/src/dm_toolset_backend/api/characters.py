@@ -3,7 +3,12 @@ from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
 from dm_toolset_backend.core.db import DBSessionDep
-from dm_toolset_backend.models import Character, CharacterPublic, CharacterHitPointsUpdate
+from dm_toolset_backend.models import (
+    Character,
+    CharacterPublic,
+    CharacterHitPointsUpdate,
+    CharacterCurrencyUpdate,
+)
 
 router = APIRouter(prefix="/characters", tags=["characters"])
 
@@ -37,6 +42,23 @@ def update_character_vitals(
         raise HTTPException(status_code=404, detail="character_not_found")
     character.hit_points_current = max(0, min(payload.hit_points_current, character.hit_points_max))
     character.hit_points_temp = max(0, payload.hit_points_temp)
+    session.add(character)
+    session.commit()
+    session.refresh(character)
+    return CharacterPublic.model_validate(character)
+
+
+@router.patch("/{character_id}/currency", response_model=CharacterPublic)
+def update_character_currency(
+    character_id: int, payload: CharacterCurrencyUpdate, session: DBSessionDep
+) -> CharacterPublic:
+    character = session.exec(_character_select.where(Character.id == character_id)).first()
+    if character is None:
+        raise HTTPException(status_code=404, detail="character_not_found")
+    character.copper_pieces = max(0, payload.copper_pieces)
+    character.silver_pieces = max(0, payload.silver_pieces)
+    character.gold_pieces = max(0, payload.gold_pieces)
+    character.platinum_pieces = max(0, payload.platinum_pieces)
     session.add(character)
     session.commit()
     session.refresh(character)

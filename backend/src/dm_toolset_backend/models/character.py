@@ -17,6 +17,10 @@ class CharacterBase(SQLModel):
     intelligence: int
     wisdom: int
     charisma: int
+    copper_pieces: int = Field(default=0)
+    silver_pieces: int = Field(default=0)
+    gold_pieces: int = Field(default=0)
+    platinum_pieces: int = Field(default=0)
 
 
 class Character(CharacterBase, table=True):
@@ -40,3 +44,10 @@ class CharacterPublic(CharacterBase):
 class CharacterHitPointsUpdate(SQLModel):
     hit_points_current: int
     hit_points_temp: int
+
+
+class CharacterCurrencyUpdate(SQLModel):
+    copper_pieces: int
+    silver_pieces: int
+    gold_pieces: int
+    platinum_pieces: int

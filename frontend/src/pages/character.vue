@@ -5,6 +5,7 @@ import AbilityScoresCard from '@/components/character/AbilityScoresCard.vue'
 import CharacterHeader from '@/components/character/CharacterHeader.vue'
 import HitPointsCard from '@/components/character/HitPointsCard.vue'
 import InitiativeCard from '@/components/character/InitiativeCard.vue'
+import InventoryCard from '@/components/character/InventoryCard.vue'
 import SavingThrowsCard from '@/components/character/SavingThrowsCard.vue'
 import SkillsCard from '@/components/character/SkillsCard.vue'
 import StatCard from '@/components/character/StatCard.vue'
@@ -13,7 +14,7 @@ import { formatModifier, passivePerception, proficiencyBonusForLevel } from '@/l
 
 const mode = ref<'exploration' | 'combat'>('exploration')
 
-const { character, notFound, updateVitals } = useCharacter(1)
+const { character, notFound, updateVitals, updateCurrency } = useCharacter(1)
 
 // Placeholder until class/talent-driven proficiency is modeled on the backend.
 const savingThrowProficiencies = ['strength', 'constitution'] as const
@@ -104,6 +105,16 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
               :proficiency-bonus="proficiencyBonusForLevel(character.level)"
               :proficient-in="[...skillProficiencies]"
               :mode="mode"
+            />
+          </div>
+          <div class="col-span-5" v-if="mode === 'exploration'">
+            <InventoryCard
+            :character-id="character.id"
+            :copper-pieces="character.copper_pieces"
+            :silver-pieces="character.silver_pieces"
+            :gold-pieces="character.gold_pieces"
+            :platinum-pieces="character.platinum_pieces"
+            @change-currency="updateCurrency"
             />
           </div>
         </div>

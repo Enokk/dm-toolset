@@ -28,7 +28,23 @@ export function useCharacter(characterId: number) {
     if (data) character.value = data
   }
 
+  async function updateCurrency(payload: {
+    copper_pieces: number
+    silver_pieces: number
+    gold_pieces: number
+    platinum_pieces: number
+  }) {
+    if (!character.value) return
+
+    const { data } = await apiClient.PATCH('/api/characters/{character_id}/currency', {
+      params: { path: { character_id: character.value.id } },
+      body: payload,
+    })
+
+    if (data) character.value = data
+  }
+
   fetch()
 
-  return { character, notFound, updateVitals }
+  return { character, notFound, updateVitals, updateCurrency }
 }
