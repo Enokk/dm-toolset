@@ -6,16 +6,19 @@ import CharacterHeader from '@/components/character/CharacterHeader.vue'
 import HitPointsCard from '@/components/character/HitPointsCard.vue'
 import InitiativeCard from '@/components/character/InitiativeCard.vue'
 import InventoryCard from '@/components/character/InventoryCard.vue'
+import ProficienciesCard from '@/components/character/ProficienciesCard.vue'
 import QuickRollsCard from '@/components/character/QuickRollsCard.vue'
 import SavingThrowsCard from '@/components/character/SavingThrowsCard.vue'
 import SkillsCard from '@/components/character/SkillsCard.vue'
 import StatCard from '@/components/character/StatCard.vue'
 import { useCharacter } from '@/composables/useCharacter'
+import { useProficiencies } from '@/composables/useProficiencies'
 import { formatModifier, passivePerception, proficiencyBonusForLevel } from '@/lib/dnd'
 
 const mode = ref<'exploration' | 'combat'>('exploration')
 
-const { character, notFound, updateVitals, updateCurrency } = useCharacter(1)
+const { character, notFound, updateVitals, updateCurrency } = useCharacter(4)
+const { proficiencies } = useProficiencies(4)
 
 // Placeholder until class/talent-driven proficiency is modeled on the backend.
 const savingThrowProficiencies = ['strength', 'constitution'] as const
@@ -32,6 +35,7 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
           :character-race="character.character_race.name"
           :character-class="character.character_class.name"
           :level="character.level"
+          :subclass="character.character_subclass?.name"
         />
       </div>
 
@@ -93,6 +97,12 @@ const skillProficiencies = ['animalHandling', 'athletics', 'perception', 'surviv
               :charisma="character.charisma"
               :proficiency-bonus="proficiencyBonusForLevel(character.level)"
               :proficient-in="[...savingThrowProficiencies]"
+              :mode="mode"
+            />
+            <ProficienciesCard
+              v-if="proficiencies"
+              :weapons="proficiencies.weapons"
+              :armor="proficiencies.armor"
               :mode="mode"
             />
           </div>

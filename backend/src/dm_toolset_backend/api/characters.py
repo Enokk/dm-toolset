@@ -13,9 +13,12 @@ from dm_toolset_backend.models import (
 router = APIRouter(prefix="/characters", tags=["characters"])
 
 # selectinload avoids the N+1 that plain Relationship() lazy-loading would cause
-# when serializing character_race/character_class for every character in the list endpoint.
+# when serializing character_race/character_class/character_subclass for every
+# character in the list endpoint.
 _character_select = select(Character).options(
-    selectinload(Character.character_race), selectinload(Character.character_class)
+    selectinload(Character.character_race),
+    selectinload(Character.character_class),
+    selectinload(Character.character_subclass),
 )
 
 

@@ -4,13 +4,13 @@ import { Compass, Swords, UserRound } from '@lucide/vue'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-const { name, characterRace, characterClass, level, portraitUrl, specialization } = defineProps<{
+const { name, characterRace, characterClass, level, portraitUrl, subclass } = defineProps<{
   name: string
   characterRace: string
   characterClass: string
   level: number
   portraitUrl?: string | null
-  specialization?: string | null
+  subclass?: string | null
 }>()
 
 const mode = defineModel<'exploration' | 'combat'>('mode', { required: true })
@@ -39,11 +39,11 @@ const mode = defineModel<'exploration' | 'combat'>('mode', { required: true })
         </p>
 
         <Badge
-          v-if="specialization"
+          v-if="subclass"
           :variant="mode == 'combat' ? 'destructive' : 'default'"
           class="px-3 py-1 text-xs label-caps"
         >
-          {{ specialization }}
+          {{ subclass }}
         </Badge>
       </div>
     </div>
